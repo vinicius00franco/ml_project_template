@@ -1,0 +1,16 @@
+# Ignore environment folder
+venv_ml_supervisionado/
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# Ignore system files
+.DS_Store
+*.log
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints
+
+# Configuração do VS Code
+.vscode/

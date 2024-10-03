@@ -1,0 +1,59 @@
+{
+    "mssql.connections": [
+        {
+            "server": "localhost\\SQLEXPRESS",
+            "database": "ScreenSound",
+            "authenticationType": "Integrated",
+            "encrypt": "Mandatory",
+            "trustServerCertificate": true,
+            "password": ""
+        },
+        {
+            "server": "VINICIUS",
+            "database": "ScreenSound",
+            "authenticationType": "Integrated",
+            "encrypt": "Mandatory",
+            "trustServerCertificate": true,
+            "password": ""
+        },
+        {
+            "server": "vinicius",
+            "database": "",
+            "authenticationType": "SqlLogin",
+            "user": "sa",
+            "password": "",
+            "emptyPasswordInput": false,
+            "savePassword": true,
+            "encrypt": "Mandatory",
+            "trustServerCertificate": true,
+            "connectTimeout": 15,
+            "commandTimeout": 30,
+            "applicationName": "vscode-mssql"
+        }
+    ],
+    "mssql.objectExplorer.groupBySchema": false,
+    "editor.minimap.enabled": false,
+    "workbench.iconTheme": "vscode-icons",
+    "python.formatting.provider": "black",
+    "python.formatting.category": "formatters", // Adicionado aqui
+
+    "[typescript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "[css]": {
+        "editor.suggest.insertMode": "replace"
+    },
+    "[php]": {
+        "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+    },
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.python"
+    },
+    "terminal.integrated.tabs.location": "left",
+    "[dockercompose]": {
+        "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+    },
+    "[vue]": {
+        "editor.defaultFormatter": "Vue.volar"
+    }
+}
