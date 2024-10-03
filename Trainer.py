@@ -1,41 +1,12 @@
 from sklearn.preprocessing import label_binarize
 
+# Classe Trainer - Responsável pelo treinamento do modelo
 class Trainer:
-    def __init__(self, data_loader, model_builder, evaluator):
-        self.data_loader = data_loader
+    def __init__(self, model_builder):
         self.model_builder = model_builder
-        self.evaluator = evaluator
 
-    def train_and_evaluate(self):
-        data = self.data_loader.load_data()
-        x = data.drop('inadimplente', axis=1)
-        y = data['inadimplente']
-        x_treino, x_val, x_teste, y_treino, y_val, y_teste = self.data_loader.split_data(x, y)
+    def train_model(self, x_train, y_train):
+        return self.model_builder.train_model(x_train, y_train)
 
-        model = self.model_builder.train_model(x_treino, y_treino)
-
-        acc_train = model.score(x_treino, y_treino)
-        acc_val, f1_val,accuracy_score_val,precision_val,recall_val,roc_auc  = self.evaluator.evaluate_model(model, x_val, y_val)
-
-        print(f'Acurácia de treino: {acc_train}')
-        print(f'Acurácia de validação: {acc_val}')
-        print(f'F1 Score: {f1_val}')
-        print(f'Acurácia Score: {accuracy_score_val}')
-        
-        print(f'Precisão: {precision_val}')
-        print(f'Recall: {recall_val}')
-        
-        print(f'AUC: {roc_auc}')
-        
-        y_pred = model.predict(x_val)
-        
-        # Binarizar y_val e y_pred
-        y_val_bin = label_binarize(y_val, classes=[0, 1])
-        y_pred_bin = label_binarize(y_pred, classes=[0, 1])
-
-        
-
-        
-        self.evaluator.plot_confusion_matrix(y_val, y_pred)
-        # Corrigir chamada do método plot_roc
-        self.evaluator.plot_roc(y_val_bin, y_pred_bin)
+    def cross_validate_model(self, x, y):
+        return self.model_builder.cross_validate_model(x, y)

@@ -29,7 +29,7 @@ class ModelEvaluator:
         return acc, f1, acc_score, precision, recall, roc_auc
 
     @staticmethod
-    def plot_confusion_matrix(y_val, y_pred, filename="matriz_confusao.png"):
+    def plot_confusion_matrix(y_val, y_pred, filename="graficos/matriz_confusao.png"):
         matriz_confusao = confusion_matrix(y_val, y_pred)
         fig, ax = plt.subplots()
         ax.set_title("Matriz de Confusão")
@@ -56,11 +56,14 @@ class ModelEvaluator:
         plt.close()
 
     @staticmethod
-    def plot_roc(y_val, y_pred, filename="curva_roc.png"):
+    def plot_roc(y_val, y_pred, filename="graficos/curva_roc.png"):
         
         RocCurveDisplay.from_predictions(y_val, y_pred, name = 'Árvore de Decisão');
         plt.title("Curva ROC")
         plt.savefig(filename)
-        plt.close()
+        plt.close()  
 
-
+    @staticmethod
+    def print_classification_report(y_val, y_pred):
+        report = classification_report(y_val, y_pred)
+        print(report)
