@@ -67,3 +67,6 @@ class ModelEvaluator:
     def print_classification_report(y_val, y_pred):
         report = classification_report(y_val, y_pred)
         print(report)
+        
+
+        

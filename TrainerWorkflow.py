@@ -20,10 +20,12 @@ class TrainerWorkflow:
         
         # Cross-validation para avaliar o modelo
         cv_results = self.model_builder.cross_validate_model(x, y)
-        media = cv_results['test_score'].mean()
-        desvio_padrao = cv_results['test_score'].std()
-        print(f'Intervalo de confiança: [{media - 2*desvio_padrao}, {min(media + 2*desvio_padrao, 1)}]')
+        cv_recall_results = self.model_builder.cross_validate_recall_model(x,y)
 
+        self.intervalo_conf(cv_results, "geral")
+        self.intervalo_conf(cv_recall_results, "scoring_recall")
+
+        
         # Avaliar o modelo nos dados de treino e validação
         acc_train = model.score(x_treino, y_treino)
         acc_val, f1_val, accuracy_score_val, precision_val, recall_val, roc_auc = self.evaluator.evaluate_model(model, x_val, y_val)
@@ -48,3 +50,9 @@ class TrainerWorkflow:
 
         # Plotar a curva ROC
         self.evaluator.plot_roc(y_val, y_pred)
+        
+    def intervalo_conf(self,resultados, texto: str):
+        media = resultados['test_score'].mean()
+        desvio_padrao = resultados['test_score'].std()
+        print(f'Intervalo de confiança {texto}: [{media - 2*desvio_padrao}, {min(media + 2*desvio_padrao, 1)}]')
+

@@ -10,3 +10,6 @@ class Trainer:
 
     def cross_validate_model(self, x, y):
         return self.model_builder.cross_validate_model(x, y)
+    
+    def cross_validate_recall_model(self, x, y ):
+        return self.model_builder.cross_validate_recall_model(x, y)
