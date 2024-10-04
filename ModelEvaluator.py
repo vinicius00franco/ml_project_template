@@ -10,6 +10,8 @@ from sklearn.metrics import (
     classification_report
 )
 import matplotlib.pyplot as plt
+from sklearn.metrics import ConfusionMatrixDisplay
+
 
 
 class ModelEvaluator:
@@ -23,10 +25,11 @@ class ModelEvaluator:
         recall = recall_score(y_val, y_pred)
         
         roc_auc = roc_auc_score(y_val, y_pred)
-        
-        
 
         return acc, f1, acc_score, precision, recall, roc_auc
+    
+    
+    
 
     @staticmethod
     def plot_confusion_matrix(y_val, y_pred, filename="graficos/matriz_confusao.png"):
@@ -67,6 +70,15 @@ class ModelEvaluator:
     def print_classification_report(y_val, y_pred):
         report = classification_report(y_val, y_pred)
         print(report)
+        
+    @staticmethod
+    def print_confusion_matriz_report(y_teste, y_pred_under, filename="graficos/matrix_confusao_under.png"):
+        ConfusionMatrixDisplay.from_predictions(y_teste, y_pred_under)
+        
+        plt.title("Matriz de Confusão Under")           
+        plt.savefig(filename)
+        plt.close()  
+        
         
 
         
