@@ -1,18 +1,34 @@
 from DataLoader import DataLoader
 from ModelBuilder import ModelBuilder
 from ModelEvaluator import ModelEvaluator
-from TrainerWorkflow import TrainerWorkflow
 from Trainer import Trainer
+from TrainerWorkflow import TrainerWorkflow
+from ModelSaver import ModelSaver
+
+def run_pipeline(filepath, model_type="DecisionTree", balance_strategy="oversample", save_model=False):
+    # Carregar os dados
+    data_loader = DataLoader(filepath=filepath)
+    
+    # Definir o tipo de modelo e balanceamento
+    model_builder = ModelBuilder(model_type=model_type)
+    
+    # Avaliador para gerar métricas e plots
+    evaluator = ModelEvaluator()
+    
+    # Criar workflow de treinamento
+    trainer = Trainer(model_builder)
+    workflow = TrainerWorkflow(data_loader, trainer, evaluator)
+    
+    # Executar o pipeline de treinamento e avaliação
+    workflow.train_and_evaluate()
+    
+    # Salvar o modelo se necessário
+    if save_model:
+        model_saver = ModelSaver()
+        model_saver.save_model(model_builder.get_model(), model_type=model_type, balance_strategy=balance_strategy)
 
 
-
-# Instanciando as classes
-data_loader = DataLoader(filepath='data/emp_automovel.csv')
-model_builder = ModelBuilder(max_depth=5) #, min_samples_split=5, min_samples_leaf=5
-evaluator = ModelEvaluator()
-
-
-trainer = Trainer(model_builder)  # model_builder já deve ser instanciado previamente
-workflow = TrainerWorkflow(data_loader, trainer, evaluator)  # data_loader e evaluator também já devem ser instanciados
-workflow.train_and_evaluate()
-
+if __name__ == "__main__":
+    # Executar o pipeline com o caminho do arquivo de dados
+    filepath = 'data/emp_automovel.csv'  # O caminho do arquivo de dados
+    run_pipeline(filepath, model_type="DecisionTree", balance_strategy="undersample", save_model=True)

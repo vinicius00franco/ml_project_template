@@ -1,83 +1,56 @@
 from sklearn.metrics import (
-    confusion_matrix,
-    f1_score,
-    accuracy_score,
-    precision_score,
-    recall_score,
-    RocCurveDisplay,
-    precision_recall_curve,
-    roc_auc_score,
-    classification_report
+    confusion_matrix, f1_score, accuracy_score, precision_score, recall_score, roc_auc_score
 )
 import matplotlib.pyplot as plt
-from sklearn.metrics import ConfusionMatrixDisplay
-
+from sklearn.metrics import ConfusionMatrixDisplay, RocCurveDisplay
+from datetime import datetime
 
 
 class ModelEvaluator:
-    @staticmethod
-    def evaluate_model(model, x_val, y_val):
+    def evaluate_model(self, model, x_val, y_val):
         y_pred = model.predict(x_val)
-        acc = model.score(x_val, y_val)
-        f1 = f1_score(y_val, y_pred)
-        acc_score = accuracy_score(y_val, y_pred)
-        precision = precision_score(y_val, y_pred)
-        recall = recall_score(y_val, y_pred)
+        return {
+            "accuracy": accuracy_score(y_val, y_pred),
+            "f1_score": f1_score(y_val, y_pred),
+            "precision": precision_score(y_val, y_pred),
+            "recall": recall_score(y_val, y_pred),
+            "roc_auc": roc_auc_score(y_val, y_pred)
+        }
+    
+    
+    
+
+    def plot_confusion_matrix(self, y_val, y_pred, filename=None):
+        # Obter data e hora atual
+        timestamp = datetime.now().strftime("%d%m%Y_%H%M%S")
         
-        roc_auc = roc_auc_score(y_val, y_pred)
-
-        return acc, f1, acc_score, precision, recall, roc_auc
-    
-    
-    
-
-    @staticmethod
-    def plot_confusion_matrix(y_val, y_pred, filename="graficos/matriz_confusao.png"):
-        matriz_confusao = confusion_matrix(y_val, y_pred)
-        fig, ax = plt.subplots()
-        ax.set_title("Matriz de Confusão")
-
-        im = ax.imshow(matriz_confusao, cmap="Blues")
-        for i in range(matriz_confusao.shape[0]):
-            for j in range(matriz_confusao.shape[1]):
-                ax.text(
-                    j,
-                    i,
-                    matriz_confusao[i, j],
-                    ha="center",
-                    va="center",
-                    color="black",
-                    fontsize=16,
-                )
-
-        plt.xlabel("Predicted label")
-        plt.ylabel("True label")
-        plt.xticks([0, 1], ["Adimplente", "Inadimplente"])
-        plt.yticks([0, 1], ["Adimplente", "Inadimplente"])
-        plt.colorbar(im)
+        # Gerar nome do arquivo com timestamp se não fornecido
+        if filename is None:
+            filename = f"graficos/matriz_confusao_{timestamp}.png"
+        
+        # Plotar a matriz de confusão
+        ConfusionMatrixDisplay.from_predictions(y_val, y_pred)
+        
+        # Salvar o gráfico no arquivo
         plt.savefig(filename)
         plt.close()
+        print(f"Matriz de confusão salva em: {filename}")
 
-    @staticmethod
-    def plot_roc(y_val, y_pred, filename="graficos/curva_roc.png"):
+    def plot_roc_curve(self, y_val, y_pred, filename=None):
+        # Obter data e hora atual
+        timestamp = datetime.now().strftime("%d%m%Y_%H%M%S")
         
-        RocCurveDisplay.from_predictions(y_val, y_pred, name = 'Árvore de Decisão');
-        plt.title("Curva ROC")
+        # Gerar nome do arquivo com timestamp se não fornecido
+        if filename is None:
+            filename = f"graficos/curva_roc_{timestamp}.png"
+        
+        # Plotar a curva ROC
+        RocCurveDisplay.from_predictions(y_val, y_pred)
+        
+        # Salvar o gráfico no arquivo
         plt.savefig(filename)
-        plt.close()  
-
-    @staticmethod
-    def print_classification_report(y_val, y_pred):
-        report = classification_report(y_val, y_pred)
-        print(report)
-        
-    @staticmethod
-    def print_confusion_matriz_report(y_teste, y_pred_under, filename="graficos/matrix_confusao_under.png"):
-        ConfusionMatrixDisplay.from_predictions(y_teste, y_pred_under)
-        
-        plt.title("Matriz de Confusão Under")           
-        plt.savefig(filename)
-        plt.close()  
+        plt.close()
+        print(f"Curva ROC salva em: {filename}")
         
         
 

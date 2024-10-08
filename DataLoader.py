@@ -3,13 +3,10 @@ from sklearn.model_selection import train_test_split
 from imblearn.over_sampling import SMOTE
 from imblearn.under_sampling import NearMiss
 
-
 class DataLoader:
     def __init__(self, filepath):
         self.filepath = filepath
         self.data = None
-        self.oversample = SMOTE()
-        self.undersample = NearMiss(version=3)
     
     def load_data(self):
         self.data = pd.read_csv(self.filepath)
@@ -30,24 +27,10 @@ class DataLoader:
         return x_treino, x_val, x_teste, y_treino, y_val, y_teste
 
     def oversample_data(self, x, y):
-        x_balanceado, y_balanceado = self.oversample.fit_resample(x, y)
-        balance = y_balanceado.value_counts(normalize=True)
-        
-        if balance.min() != balance.max():
-            raise ValueError("Os dados não estão perfeitamente equilibrados.")
-            
-        print("Os dados estão equilibrados.")
-        
-        return x_balanceado, y_balanceado
-    
+        smote = SMOTE()
+        return smote.fit_resample(x, y)
+
     def undersample_data(self, x, y):
-        x_balanceado, y_balanceado = self.undersample.fit_resample(x, y)
-        # balance = y_balanceado.value_counts(normalize=True)
-        
-        # if balance.min() != balance.max():
-        #     raise ValueError("Os dados não estão perfeitamente equilibrados.")
-            
-        # print("Os dados estão equilibrados.")
-        
-        return x_balanceado, y_balanceado
+        undersample = NearMiss(version=3)
+        return undersample.fit_resample(x, y)
         
