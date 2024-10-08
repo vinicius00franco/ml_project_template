@@ -16,10 +16,11 @@ class ModelBuilder:
         else:
             raise ValueError("Unsupported model type")
         self.skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=5)
+        self.pipeline = None
 
     def build_pipeline(self, balance_strategy="oversample"):
         if balance_strategy == "oversample":
-            return imbpipeline(
+            self.pipeline = imbpipeline(
                 [
                     ("scaler", StandardScaler()),
                     ("oversample", SMOTE()),
@@ -27,7 +28,7 @@ class ModelBuilder:
                 ]
             )
         elif balance_strategy == "undersample":
-            return imbpipeline(
+            self.pipeline = imbpipeline(
                 [
                     ("scaler", StandardScaler()),
                     ("undersample", NearMiss(version=3)),
@@ -36,14 +37,28 @@ class ModelBuilder:
             )
         else:
             raise ValueError("Unsupported balance strategy")
+        return self.pipeline
 
     def train_model(self, x_train, y_train):
-        self.model.fit(x_train, y_train)
-        return self.model
+        # Garante que o pipeline foi criado
+        if self.pipeline is None:
+            raise ValueError(
+                "You need to build the pipeline before training the model."
+            )
+
+        self.pipeline.fit(x_train, y_train)
+        return self.pipeline
 
     def cross_validate_model(self, x, y):
+        # Garante que o pipeline foi criado
+        if self.pipeline is None:
+            raise ValueError(
+                "You need to build the pipeline before cross-validating the model."
+            )
+
         scoring = ["accuracy", "precision", "recall", "f1", "roc_auc"]
-        return cross_validate(self.model, x, y, cv=self.skf, scoring=scoring)
+        # Usar o pipeline em vez do modelo diretamente
+        return cross_validate(self.pipeline, x, y, cv=self.skf, scoring=scoring)
 
     def get_model(self):
-        return self.model
+        return self.pipeline if self.pipeline else self.model

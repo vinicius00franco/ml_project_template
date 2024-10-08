@@ -8,9 +8,6 @@ class Trainer:
     def train_model(self, x_train, y_train):
         return self.model_builder.train_model(x_train, y_train)
     
-    
-    def train(self, x_train, y_train):
-        return self.model_builder.train_model(x_train, y_train)
 
-    def cross_validate(self, x, y):
-        return self.model_builder.cross_validate_model(x, y)
+    def cross_validate(self, x_train, y_train):
+        return self.model_builder.cross_validate_model(x_train, y_train)
