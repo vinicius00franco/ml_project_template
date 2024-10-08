@@ -4,6 +4,7 @@ from sklearn.model_selection import cross_validate, StratifiedKFold
 from imblearn.pipeline import Pipeline as imbpipeline
 from imblearn.over_sampling import SMOTE
 from imblearn.under_sampling import NearMiss
+from sklearn.preprocessing import StandardScaler
 
 
 class ModelBuilder:
@@ -18,10 +19,20 @@ class ModelBuilder:
 
     def build_pipeline(self, balance_strategy="oversample"):
         if balance_strategy == "oversample":
-            return imbpipeline([("oversample", SMOTE()), ("model", self.model)])
+            return imbpipeline(
+                [
+                    ("scaler", StandardScaler()),
+                    ("oversample", SMOTE()),
+                    ("model", self.model),
+                ]
+            )
         elif balance_strategy == "undersample":
             return imbpipeline(
-                [("undersample", NearMiss(version=3)), ("model", self.model)]
+                [
+                    ("scaler", StandardScaler()),
+                    ("undersample", NearMiss(version=3)),
+                    ("model", self.model),
+                ]
             )
         else:
             raise ValueError("Unsupported balance strategy")
@@ -30,7 +41,8 @@ class ModelBuilder:
         self.model.fit(x_train, y_train)
         return self.model
 
-    def cross_validate_model(self, x, y, scoring="recall"):
+    def cross_validate_model(self, x, y):
+        scoring = ["accuracy", "precision", "recall", "f1", "roc_auc"]
         return cross_validate(self.model, x, y, cv=self.skf, scoring=scoring)
 
     def get_model(self):

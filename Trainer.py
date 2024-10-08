@@ -12,5 +12,5 @@ class Trainer:
     def train(self, x_train, y_train):
         return self.model_builder.train_model(x_train, y_train)
 
-    def cross_validate(self, x, y, scoring="recall"):
-        return self.model_builder.cross_validate_model(x, y, scoring=scoring)
+    def cross_validate(self, x, y):
+        return self.model_builder.cross_validate_model(x, y)
