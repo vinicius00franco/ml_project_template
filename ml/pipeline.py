@@ -1,9 +1,9 @@
-from DataLoader import DataLoader
-from ModelBuilder import ModelBuilder
-from ModelEvaluator import ModelEvaluator
-from Trainer import Trainer
-from TrainerWorkflow import TrainerWorkflow
-from ModelSaver import ModelSaver
+from ml.DataLoader import DataLoader
+from ml.ModelBuilder import ModelBuilder
+from ml.ModelEvaluator import ModelEvaluator
+from ml.Trainer import Trainer
+from ml.TrainerWorkflow import TrainerWorkflow
+from ml.ModelSaver import ModelSaver
 
 
 def run_pipeline(

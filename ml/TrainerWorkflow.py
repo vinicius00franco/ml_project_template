@@ -1,5 +1,5 @@
 from sklearn.preprocessing import label_binarize
-from Trainer import Trainer
+from ml.Trainer import Trainer
 
 
 class TrainerWorkflow:
